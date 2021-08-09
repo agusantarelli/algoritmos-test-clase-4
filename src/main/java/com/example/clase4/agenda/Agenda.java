@@ -1,8 +1,13 @@
 package com.example.clase4.agenda;
 
+import com.example.clase4.exceptions.ContactNotFoundException;
+import com.example.clase4.exceptions.ParameterIsNull;
+
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.lang.Object;
 
 
 /*
@@ -23,21 +28,38 @@ public class Agenda {
             new HashMap<>();
 
     public static void nuevoContacto(String nombre, int telefono) {
-        //TODO -> implement me
+        if(Objects.isNull(nombre)){
+            throw new ParameterIsNull("El nombre o teléfono es null");
+        }
+        else{
+            miAgenda.put(nombre,telefono);
+        }
     }
 
     public static void modificarTelefono(String nombre, int telefono) {
-        //TODO -> implement me
+        if(Objects.isNull(nombre)){
+            throw new ParameterIsNull("El contacto a modificar es null");
+        }
+        else if(Objects.isNull(miAgenda.get(nombre))){
+            throw new ContactNotFoundException("El contacto a modificar no existe en la agenda");
+        }else{
+            miAgenda.replace(nombre, miAgenda.get(nombre), telefono);
+        }
     }
 
     public static Integer obtenerTelefono(String nombre) {
-        //TODO -> implement me
-        return null;
+        if(Objects.isNull(nombre)){
+            throw new ContactNotFoundException("El contacto no se encuentra en la agenda");
+        }
+        return miAgenda.get(nombre);
     }
 
     public static boolean eliminarTelefono(String nombre) {
-        //TODO -> implement me
-        return false;
+        if(Objects.isNull(nombre)){
+            throw new ContactNotFoundException("No se puede eliminar un contacto que no existe");
+        }
+
+        return miAgenda.remove(nombre) != null;
     }
 
     protected static List<Integer> miAgenda() {
